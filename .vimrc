@@ -1,6 +1,128 @@
-" call pathogen#infect()
+scriptencoding utf-8 " yey! utf-8
 
+execute pathogen#infect()
+
+Helptag " Help for plugins
+
+" Basics
+set cryptmethod=blowfish " use the good stuff!
+set nocompatible " explicitly get out of vi-compatible mode
+set noexrc " don't use local version of .(g)vimrc, .exrc
+set background=dark " we plan to use a dark background
+set fenc=utf-8 " UTF-8
+set cpoptions=aABceFsmq
+"             |||||||||
+"             ||||||||+-- When joining lines, leave the cursor between joined lines
+"             |||||||+-- When a new match is created (showmatch) pause for .5
+"             ||||||+-- Set buffer options when entering the buffer
+"             |||||+-- :write command updates current file name automatically add <CR> to the last line when using :@r
+"             |||+-- Searching continues at the end of the match at the cursor position
+"             ||+-- A backslash has no special meaning in mappings
+"             |+-- :write updates alternative file name
+"             +-- :read updates alternative file name
+syntax on " syntax highlighting on
+let g:skip_loading_mswin=1 " Just in case :)
+set history=99999 " big old history
+set formatoptions+=n " Recognize numbered lists
+set formatlistpat=^\\s*\\(\\d\\\|[-*]\\)\\+[\\]:.)}\\t\ ]\\s* "and bullets, too
+set ttyfast " Assume a fast terminal
+set ttyscroll=5 " See if this helps scroll speed
+
+" turn off beep
+set noerrorbells
+set novisualbell
+set t_vb=
+
+" turn off background redraw
+set t_ut=
+
+" General
 filetype plugin indent on
+set backspace=indent,eol,start " make backspace a more flexible
+set backup " make backup files
+if exists('$TMUX')
+  set clipboard=
+else
+  set clipboard=unnamed "sync with OS clipboard
+endif
+set fileformats=unix,dos,mac " support all three, in this order
+set whichwrap=b,s,h,l,<,>,~,[,] " everything wraps
+set wildmenu " turn on command line completion wild style
+set wildignore=*.pdf,*.pyo,*.pyc,*.zip,*.so,*.swp,*.dll,*.o,*.DS_Store,*.obj,*.bak,*.exe,*.pyc,*.jpg,*.gif,*.png,*.a " ignore these
+set wildmode=list:longest " turn on wild mode huge list
+set viewoptions=folds,options,cursor,unix,slash " Windows/Linux compatibility
+set nojoinspaces " Prevents inserting two spaces after punctuation on a join (J)
+set splitbelow " new splits are down
+set splitright " new vsplits are to the right
+set switchbuf=useopen " jump to first open window with buffer
+
+
+" Vim UI
+set incsearch " BUT do highlight as you type you search phrase
+set laststatus=2 " always show the status line
+set lazyredraw " do not redraw while running macros
+set linespace=0 " don't insert any extra pixel lines betweens rows
+set list " we do want to show tabs and tailing to ensure we get them out of my files
+set listchars=tab:>-,trail:- " show tabs and trailing
+set matchtime=1 " how many tenths of a second to blink matching brackets for
+set nohlsearch " do not highlight searched for phrases
+set nostartofline " leave my cursor where it was
+set number " turns out I hate relative numbering
+set numberwidth=5 " We are good up to 99999 lines
+set report=0 " tell us when anything is changed via :
+set ruler " Always show current positions along the bottom
+set scrolloff=5 " Keep 5 lines (top/bottom) for scope
+set shortmess=aOstTI " shortens messages to avoid 'press a key' prompt
+set noshowcmd " I know what I am doing.
+set showmatch " show matching brackets
+set sidescrolloff=5 " Keep 5 lines at the size
+set sidescroll=5 " If you hit edge, jump 5
+set scrolljump=5 " If you hit bottom or top, jump 5
+set statusline=%F%m%r%h%w[%L]%{fugitive#statusline()}[%{&ff}]%y[%p%%][%04l,%04v]
+"              | | | | |  |  |                        |      |  |     |    |
+"              | | | | |  |  |                        |      |  |     |    +-- current column
+"              | | | | |  |  |                        |      |  |     +-- current line
+"              | | | | |  |  |                        |      |  +-- current % into file
+"              | | | | |  |  |                        |      +-- current syntax in square brackets
+"              | | | | |  |  |                        +-- current fileformat
+"              | | | | |  |  +-- add fugitive info
+"              | | | | |  +-- number of lines
+"              | | | | +-- preview flag in square brackets
+"              | | | +-- help flag in square brackets
+"              | | +-- readonly flag in square brackets
+"              | +-- rodified flag in square brackets
+"              +-- full path to file in the buffer
+
+
+" Text Formatting/Layout
+set completeopt=menuone " don't use a pop up menu for completions
+set diffopt=filler,iwhite " filler and whitespace
+set expandtab " no real tabs please!
+set formatoptions=rq " Automatically insert comment leader on return, and let gq format comments
+set ignorecase " case insensitive by default
+set infercase " case inferred by default
+set smartcase " if there are caps, go case-sensitive
+set nowrap " do not wrap line
+set textwidth=0 " No autowrapping
+set shiftround " when at 3 spaces, and I hit > ... go to 4, not 5
+set shiftwidth=4 " auto-indent amount when using cindent, >>, << and stuff like that
+set softtabstop=4 " when hitting tab or backspace, how many spaces should a tab be (see expandtab)
+set tabstop=8 " real tabs should be 8, and they will show with set list on
+
+" Folding
+set foldenable " Turn on folding
+set foldmethod=marker " Fold on the marker
+set foldmarker={,} " use simple markers
+set foldlevel=100 " Don't autofold anything (but I can still fold manually)
+set foldnestmax=1 " I only like to fold outer functions
+set foldopen=block,hor,mark,percent,quickfix,tag " what movements open folds
+
+" Fugitive
+nmap <leader>gc :Gcommit<CR>
+nmap <leader>ga :Gwrite<CR>
+nmap <leader>gw :Gwrite<CR>
+nmap <leader>grm :Gremove<CR>
+nmap <leader>gm :Gmove<CR>
 
 " nerd tree specific configs
 " -------------------------
@@ -126,3 +248,4 @@ inoremap <esc> <nop>
 "        autocmd FileType sql :iabbrev <buffer> funn CREATE OR REPLACE FUNCTION ()<CR>RETURNS<CR>LANGUAGE plpgsql<CR>AS $$<CR>DECLARE<cr>BEGIN<CR>END;<CR>$$;
 "        autocmd FileType sql :iabbrev <buffer> sin SELECT INTO <CR> FROM <CR> WHERE ;
 "augroup END
+
