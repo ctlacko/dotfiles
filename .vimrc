@@ -1,3 +1,4 @@
+" TODO: compile with wildmenu and undofile
 scriptencoding utf-8 " yey! utf-8
 
 execute pathogen#infect()
@@ -117,12 +118,60 @@ set foldlevel=100 " Don't autofold anything (but I can still fold manually)
 set foldnestmax=1 " I only like to fold outer functions
 set foldopen=block,hor,mark,percent,quickfix,tag " what movements open folds
 
+" random settings
+set hidden " load files in background
+set undofile " persistent undo
+set undolevels=1000 " persistent undo
+set undoreload=10000 " to undo forced reload with :e!
+syntax sync minlines=300 " 300 lines wrapping for syntax
+
 " Fugitive
 nmap <leader>gc :Gcommit<CR>
 nmap <leader>ga :Gwrite<CR>
 nmap <leader>gw :Gwrite<CR>
 nmap <leader>grm :Gremove<CR>
 nmap <leader>gm :Gmove<CR>
+
+if has("autocmd")
+  augroup vimrcAu
+    " Clear!
+    au!
+
+    " For secure reading/writing
+    au BufReadPost * if &key != "" | setlocal noswapfile nowritebackup viminfo= nobackup noshelltemp history=0 secure | endif
+
+    " Things that use two spaces rather than four
+    au BufRead,BufNewFile *.rb,*.rhtml setlocal sw=2 sts=2 " ruby likes two
+    au BufRead,BufNewFile *.yaml setlocal sw=2 sts=2 " ruby likes two
+
+    " Go setlocalup assumptions: gocode, godef, gotags all in path
+    au BufRead,BufNewFile *.go setlocal noexpandtab sw=8 sts=8 syntax=go listchars=tab:\|\ ,trail:- " Go uses tabs
+    au FileType go autocmd BufWritePre <buffer> :keepjumps Fmt " assumes Fmt is defined
+    au BufRead,BufNewFile MakeFile,Makefile,makefile setlocal noexpandtab sw=8 sts=8 syntax=make listchars=tab:\|\ ,trail:- " so does make
+
+    " Override types
+    au BufNewFile,BufRead *.ahk setlocal filetype=ahk " Autohotkey
+    au BufNewFile,BufRead *.ps1 setlocal filetype=ps1 " Powershell
+    au BufNewFile,BufRead *.md setlocal filetype=markdown spell " Markdown and spelling on
+    au BufNewFile,BufRead *.dtl setlocal filetype=htmldjango " Django Templates
+
+    " Things I like spellcheck in
+    au FileType gitcommit setlocal spell
+    au FileType svn       setlocal spell
+    au FileType asciidoc  setlocal spell
+  augroup END
+endif
+
+if has("gui_running")
+  " Basics
+  set guifont=Anonymous\ Pro:h18
+  set guioptions=ce
+  "              ||
+  "              |+-- use simple dialogs rather than pop-ups
+  "              +-- use GUI tabs, not console style tabs
+  set mousehide " hide the mouse cursor when typing
+endif
+
 
 " nerd tree specific configs
 " -------------------------
@@ -132,31 +181,7 @@ nmap <leader>gm :Gmove<CR>
 
 " toggle that background between light and dark
 " call togglebg#map("<F5>")
-
-" turn on line numbers
-set number
-" set the file format
-set fileformat=unix
 colors solarized
-
-" TODO: wrap this in a check to see if we are running a gui
-" set the guifont
-set guifont=Anonymous\ Pro:h18
-
-" turn syntax highlighting on
-syntax on
-" turn off the bell!
-set vb t_vb=
-" use spaces instead of tabs when pressing tab
-set expandtab
-" TODO: figure out what shiftwidth is
-set shiftwidth=2
-" sets the number of spaces that a tab counts for while performing editing
-" operations
-set softtabstop=2
-" minimal # of columns to use for the line number
-set numberwidth=2
-set background="light"
 
 " make semicolon==colon for quick command interface access
 map ; :
