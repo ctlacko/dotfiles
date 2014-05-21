@@ -2,10 +2,9 @@ call pathogen#infect()
 
 filetype plugin indent on
 
-" Toggle that tree
-map <F3> :NERDTreeToggle
-"map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
-"
+" Toggle nerd tree
+" map <F3> :NERDTreeToggle
+
 " toggle that background between light and dark
 call togglebg#map("<F5>")
 set number
