@@ -1,4 +1,4 @@
-" TODO: compile with wildmenu and undofile
+" TODO: compile with wildmenu and undofile for much success
 scriptencoding utf-8 " yey! utf-8
 
 execute pathogen#infect()
@@ -175,9 +175,8 @@ endif
 
 " nerd tree specific configs
 " -------------------------
-" Toggle nerd tree
-" let NERDTreeWinPos="left"
-" map <F3> :NERDTreeToggle
+let NERDTreeWinPos="left"
+map <F3> :NERDTreeToggle
 
 " toggle that background between light and dark
 " call togglebg#map("<F5>")
