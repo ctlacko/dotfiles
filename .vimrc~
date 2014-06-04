@@ -17,11 +17,7 @@ Plugin 'scrooloose/nerdtree'
 " Plugin 'Valloric/YouCompleteMe'
 " for now, just use good old supertab
 Plugin 'ervandew/supertab'
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
-
-Plugin 'honza/vim-snippets'
+Plugin 'msanders/snipmate.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()
