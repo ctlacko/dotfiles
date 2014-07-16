@@ -1,6 +1,8 @@
 # CUSTOM ZSHRC
 ZSH_THEME="muse"
 
+plugins=(git)
+
 # vim for everything
 export GIT_EDITOR=vim
 export VISUAL=vim
