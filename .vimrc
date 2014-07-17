@@ -11,6 +11,8 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
+" Plugin 'SirVer/ultisnips'
+
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 " more like -> you break my vim, maybe someday can get this to work on mac osx
@@ -20,8 +22,9 @@ Plugin 'ervandew/supertab'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
-
 Plugin 'honza/vim-snippets'
+Plugin 'papanikge/vim-voogle'
+Plugin 'godlygeek/tabular'
 
 " All of your Plugins must be added before the following line
 call vundle#end()
@@ -159,6 +162,12 @@ nmap <leader>gw :Gwrite<CR>
 nmap <leader>grm :Gremove<CR>
 nmap <leader>gm :Gmove<CR>
 
+" Ultisnips
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
 if has("autocmd")
   augroup vimrcAu
     " Clear!
@@ -171,6 +180,7 @@ if has("autocmd")
     au BufRead,BufNewFile *.rb,*.rhtml setlocal sw=2 sts=2 " ruby likes two
     au BufRead,BufNewFile *.yaml setlocal sw=2 sts=2 " yaml likes two
     au BufRead,BufNewFile *.jade setlocal sw=2 sts=2 " jade likes two
+    au BufRead,BufNewFile *.sh setlocal sw=2 sts=2 " bash likes two
 
     " Go setlocalup assumptions: gocode, godef, gotags all in path
     au BufRead,BufNewFile *.go setlocal noexpandtab sw=8 sts=8 syntax=go listchars=tab:\|\ ,trail:- " Go uses tabs
@@ -183,10 +193,14 @@ if has("autocmd")
     au BufNewFile,BufRead *.md setlocal filetype=markdown spell " Markdown and spelling on
     au BufNewFile,BufRead *.dtl setlocal filetype=htmldjango " Django Templates
 
+
     " Things I like spellcheck in
     au FileType gitcommit setlocal spell
     au FileType svn       setlocal spell
     au FileType asciidoc  setlocal spell
+
+    " we need tabs for snippets for some reason
+    au BufRead,BufNewFile *.snippets setlocal noexpandtab
 
     " NERDTree autocommands
     autocmd vimenter * NERDTree
