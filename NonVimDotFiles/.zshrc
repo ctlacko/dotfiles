@@ -3,10 +3,6 @@ ZSH_THEME="muse"
 
 plugins=(git)
 
-# vim for everything
-export GIT_EDITOR=vim
-export VISUAL=vim
-export EDITOR=vim
 
 # DEFAULT ZSHRC 
 # Path to your oh-my-zsh installation.
