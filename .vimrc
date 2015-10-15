@@ -21,15 +21,39 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'ervandew/supertab'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
+" code snippets
 Plugin 'garbas/vim-snipmate'
+" a collection of useful snippets
 Plugin 'honza/vim-snippets'
+" search things in google with :gs
 Plugin 'papanikge/vim-voogle'
+" nice text formatting with Tab /<char>
 Plugin 'godlygeek/tabular'
+" makes buffers look like tabs at the top
+Plugin 'ap/vim-buftabline' 
+" adds Bdelete command for a 'well-behaved' buffer delete mechanism
+Plugin 'moll/vim-bbye'
+
+" adds syntax highlighting for jade template files
+Plugin 'digitaltoad/vim-jade'
+
+" get the solarized colorscheme
+Plugin 'altercation/vim-colors-solarized'
+
+" for easy searching with :Grep or <leader>vv
+Plugin 'dkprice/vim-easygrep'
+
+" for pretty parentheses, etc.
+Plugin 'junegunn/rainbow_parentheses.vim'
+
+" Make comments
+Plugin 'tpope/vim-commentary'
 
 " All of your Plugins must be added before the following line
 call vundle#end()
 
 filetype plugin indent on
+
 
 " Pathogen commands
 " no longer using pathogen, but keep this here in case we switch back
@@ -40,7 +64,7 @@ filetype plugin indent on
 set cryptmethod=blowfish " use the good stuff!
 set nocompatible " explicitly get out of vi-compatible mode
 set noexrc " don't use local version of .(g)vimrc, .exrc
-set background=dark " we plan to use a dark background
+set background=light " we plan to use a dark background
 set fenc=utf-8 " UTF-8
 set cpoptions=aABceFsmq
 "             |||||||||
@@ -68,14 +92,19 @@ set t_vb=
 " turn off background redraw
 set t_ut=
 
+" for 256 color terminal
+set t_Co=256
+
 " General
 set backspace=indent,eol,start " make backspace a more flexible
 set backup " make backup files
-if exists('$TMUX')
+
+ if exists('$TMUX')
   set clipboard=
 else
   set clipboard=unnamed "sync with OS clipboard
 endif
+
 set fileformats=unix,dos,mac " support all three, in this order
 set whichwrap=b,s,h,l,<,>,~,[,] " everything wraps
 set wildmenu " turn on command line completion wild style
@@ -93,8 +122,8 @@ set incsearch " BUT do highlight as you type you search phrase
 set laststatus=2 " always show the status line
 set lazyredraw " do not redraw while running macros
 set linespace=0 " don't insert any extra pixel lines betweens rows
-set list " we do want to show tabs and tailing to ensure we get them out of my files
-set listchars=tab:>-,trail:- " show tabs and trailing
+" set list " we do want to show tabs and tailing to ensure we get them out of my files
+" set listchars=tab:>-,trail:- " show tabs and trailing
 set matchtime=1 " how many tenths of a second to blink matching brackets for
 set nohlsearch " do not highlight searched for phrases
 set nostartofline " leave my cursor where it was
@@ -173,6 +202,10 @@ if has("autocmd")
     " Clear!
     au!
 
+    " Rainbow Parenthese always on for now
+    au VimEnter * RainbowParentheses
+
+
     " For secure reading/writing
     au BufReadPost * if &key != "" | setlocal noswapfile nowritebackup viminfo= nobackup noshelltemp history=0 secure | endif
 
@@ -181,6 +214,7 @@ if has("autocmd")
     au BufRead,BufNewFile *.yaml setlocal sw=2 sts=2 " yaml likes two
     au BufRead,BufNewFile *.jade setlocal sw=2 sts=2 " jade likes two
     au BufRead,BufNewFile *.sh setlocal sw=2 sts=2 " bash likes two
+    au BufRead,BufNewFile *.html setlocal sw=2 sts=2 " html likes two
 
     " Go setlocalup assumptions: gocode, godef, gotags all in path
     au BufRead,BufNewFile *.go setlocal noexpandtab sw=8 sts=8 syntax=go listchars=tab:\|\ ,trail:- " Go uses tabs
@@ -203,10 +237,25 @@ if has("autocmd")
     au BufRead,BufNewFile *.snippets setlocal noexpandtab
 
     " NERDTree autocommands
-    autocmd vimenter * NERDTree
+    " autocmd vimenter * NERDTree /Users/chrislacko1/code
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif " if NERDTree is last window open, close vim
   augroup END
 endif
+
+" Buffer utilities
+" ----------------
+"
+" Vertical Split Buffer Function
+function! VerticalSplitBuffer(buffer)
+     execute "vert belowright sb" a:buffer 
+endfunction
+
+" Vertical Split Buffer Mapping
+command! -nargs=1 Vbuffer call VerticalSplitBuffer(<f-args>)
+
+nnoremap <leader>w :Bdelete <CR>
+
+
 
 if has("gui_running")
   " Basics
@@ -224,9 +273,16 @@ endif
 let NERDTreeWinPos="right"
 map <F3> :NERDTreeToggle
 
+" rainbow parentheses settings
+let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+
 " toggle that background between light and dark
 " call togglebg#map("<F5>")
+"
+let g:solarized_termcolors=256
+
 colors solarized
+" colors skywalker
 
 " make semicolon==colon for quick command interface access
 map ; :
@@ -287,6 +343,16 @@ inoremap jk <esc>
 
 " training aid for the above mapping
 inoremap <esc> <nop>
+
+" make tabs easier to navigate, since i'm using subertab we don't need c-n and
+" c-p
+nnoremap <C-N> :bnext<CR>
+nnoremap <C-P> :bprev<CR>
+
+" highlight characters that are greater than 80 
+highlight OverLength ctermbg=darkred ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+set textwidth=80
 
 
 " consume the space at the end of an operation
